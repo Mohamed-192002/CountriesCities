@@ -16,17 +16,15 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         _logger.LogError(exception, "An unexpected error occurred.");
 
-        var problemDetails = new ProblemDetails
+        var errorResponse = new CountriesCities.Application.Common.ErrorResponse
         {
-            Status = StatusCodes.Status500InternalServerError,
+            StatusCode = StatusCodes.Status500InternalServerError,
             Title = "Server Error",
-            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
-            Detail = "An unexpected error occurred while processing your request."
+            Message = "An unexpected error occurred while processing your request."
         };
 
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
-        
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        httpContext.Response.StatusCode = errorResponse.StatusCode;
+        await httpContext.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
         
         return true;
     }

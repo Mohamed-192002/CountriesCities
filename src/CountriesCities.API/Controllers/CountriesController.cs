@@ -7,7 +7,6 @@ namespace CountriesCities.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[ServiceFilter(typeof(ValidationFilterAttribute))]
 public class CountriesController : ControllerBase
 {
     private readonly ICountryService _countryService;
@@ -35,12 +34,11 @@ public class CountriesController : ControllerBase
         
         if (response == null)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"Country with id {id} was not found."
+                Message = $"Country with id {id} was not found."
             });
         }
 
@@ -53,7 +51,6 @@ public class CountriesController : ControllerBase
     {
         if (pageNumber < 1) pageNumber = 1;
         if (pageSize < 1) pageSize = 10;
-        if (pageSize > 100) pageSize = 100;
 
         var response = await _countryService.GetPagedAsync(pageNumber, pageSize, search, cancellationToken);
         return Ok(response);
@@ -69,12 +66,11 @@ public class CountriesController : ControllerBase
 
         if (!success)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"Country with id {id} was not found."
+                Message = $"Country with id {id} was not found."
             });
         }
 
@@ -90,12 +86,11 @@ public class CountriesController : ControllerBase
 
         if (!success)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"Country with id {id} was not found."
+                Message = $"Country with id {id} was not found."
             });
         }
 

@@ -7,7 +7,6 @@ namespace CountriesCities.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[ServiceFilter(typeof(ValidationFilterAttribute))]
 public class CitiesController : ControllerBase
 {
     private readonly ICityService _cityService;
@@ -28,12 +27,11 @@ public class CitiesController : ControllerBase
         var country = await _countryService.GetByIdAsync(request.CountryId, cancellationToken);
         if (country == null)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"Country with id {request.CountryId} was not found."
+                Message = $"Country with id {request.CountryId} was not found."
             });
         }
 
@@ -50,12 +48,11 @@ public class CitiesController : ControllerBase
         
         if (response == null)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"City with id {id} was not found."
+                Message = $"City with id {id} was not found."
             });
         }
 
@@ -68,7 +65,6 @@ public class CitiesController : ControllerBase
     {
         if (pageNumber < 1) pageNumber = 1;
         if (pageSize < 1) pageSize = 10;
-        if (pageSize > 100) pageSize = 100;
 
         var response = await _cityService.GetPagedAsync(pageNumber, pageSize, search, cancellationToken);
         return Ok(response);
@@ -83,12 +79,11 @@ public class CitiesController : ControllerBase
         var country = await _countryService.GetByIdAsync(request.CountryId, cancellationToken);
         if (country == null)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"Country with id {request.CountryId} was not found."
+                Message = $"Country with id {request.CountryId} was not found."
             });
         }
 
@@ -96,12 +91,11 @@ public class CitiesController : ControllerBase
 
         if (!success)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"City with id {id} was not found."
+                Message = $"City with id {id} was not found."
             });
         }
 

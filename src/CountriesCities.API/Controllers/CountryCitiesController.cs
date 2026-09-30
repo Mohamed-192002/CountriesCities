@@ -26,18 +26,16 @@ public class CountryCitiesController : ControllerBase
         var country = await _countryService.GetByIdAsync(countryId, cancellationToken);
         if (country == null)
         {
-            return NotFound(new ProblemDetails
+            return NotFound(new Application.Common.ErrorResponse
             {
-                Type = "https://httpstatuses.com/404",
+                StatusCode = StatusCodes.Status404NotFound,
                 Title = "Resource Not Found",
-                Status = 404,
-                Detail = $"Country with id {countryId} was not found."
+                Message = $"Country with id {countryId} was not found."
             });
         }
 
         if (pageNumber < 1) pageNumber = 1;
         if (pageSize < 1) pageSize = 10;
-        if (pageSize > 100) pageSize = 100;
 
         var response = await _cityService.GetByCountryIdPagedAsync(countryId, pageNumber, pageSize, cancellationToken);
         return Ok(response);

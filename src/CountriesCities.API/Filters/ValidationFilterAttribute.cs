@@ -36,7 +36,22 @@ public class ValidationFilterAttribute : ActionFilterAttribute
 
         if (!context.ModelState.IsValid)
         {
-            context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState));
+            var errors = context.ModelState
+                .Where(e => e.Value != null && e.Value.Errors.Count > 0)
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            var errorResponse = new CountriesCities.Application.Common.ErrorResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Title = "Validation Failed",
+                Message = "One or more validation errors occurred.",
+                Errors = errors
+            };
+
+            context.Result = new BadRequestObjectResult(errorResponse);
             return;
         }
 
