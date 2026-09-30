@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CountriesCities.API/CountriesCities.API.csproj" />
+    <Project Path="src/CountriesCities.Application/CountriesCities.Application.csproj" />
+    <Project Path="src/CountriesCities.Domain/CountriesCities.Domain.csproj" />
+    <Project Path="src/CountriesCities.Infrastructure/CountriesCities.Infrastructure.csproj" />
+  </Folder>
+</Solution>
